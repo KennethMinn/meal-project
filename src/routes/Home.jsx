@@ -1,9 +1,15 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { MealContext } from '../contexts/meal-context';
 import { useNavigate } from 'react-router-dom';
+import { SearchContext } from '../contexts/search-context';
 
 const Home = () => {
   const { meal, setMeal } = useContext(MealContext);
+  const { searchField } = useContext(SearchContext);
+
+  const newFilteredMeals = meal.filter(m => {
+    return m.strMeal.toLowerCase().includes(searchField);
+  });
 
   useEffect(() => {
     getMeals();
@@ -14,7 +20,7 @@ const Home = () => {
     );
     const { meals } = await res.json();
     setMeal(meals);
-    console.log(meals);
+    setFilterMeals(meals);
   };
 
   const nav = useNavigate();
@@ -25,8 +31,8 @@ const Home = () => {
   // };
 
   return (
-    <div className=" grid grid-cols-3 gap-4 gap-y-8 mt-7">
-      {meal.map(({ strMeal, strMealThumb, idMeal }) => (
+    <div className=" grid grid-cols-3 gap-4 gap-y-8 mt-7 min-h-screen">
+      {newFilteredMeals.map(({ strMeal, strMealThumb, idMeal }) => (
         <div
           className="card card-compact w-96 bg-base-100 shadow-xl h-[400px]"
           key={idMeal}

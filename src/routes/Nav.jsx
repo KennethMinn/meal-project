@@ -1,7 +1,14 @@
-import React from 'react';
+import { useContext } from 'react';
 import { Outlet, NavLink, Link } from 'react-router-dom';
+import { SearchContext } from '../contexts/search-context';
 
 const Nav = () => {
+  const { setSearchField } = useContext(SearchContext);
+  const changeHandler = e => {
+    const value = e.target.value.toLowerCase();
+    setSearchField(value);
+    console.log(value);
+  };
   return (
     <>
       <div className=" flex justify-between items-center">
@@ -15,6 +22,7 @@ const Nav = () => {
               type="text"
               placeholder="Search"
               className="input input-bordered"
+              onChange={changeHandler}
             />
           </div>
         </div>
